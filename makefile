@@ -11,6 +11,8 @@ clean:
 install:
 	go get -u golang.org/x/sys/...
 	go get github.com/fsnotify/fsnotify
+	go get github.com/maxchehab/geddit
+	go get golang.org/x/crypto/ssh
 
 run: dist/redditfs.exe
 	./dist/redditfs.exe

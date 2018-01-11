@@ -1,5 +1,5 @@
 package main
 
 func main() {
-	watch("./test")
+	watch("./test", GetSession())
 }
