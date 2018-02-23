@@ -13,6 +13,7 @@ install:
 	go get github.com/fsnotify/fsnotify
 	go get github.com/maxchehab/geddit
 	go get golang.org/x/crypto/ssh
-
+	go get github.com/ryanuber/columnize
+	
 run: dist/redditfs.exe
 	./dist/redditfs.exe

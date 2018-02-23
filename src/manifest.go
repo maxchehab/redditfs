@@ -42,8 +42,8 @@ func CreateManifestFromString(JSON string) (Manifest, error) {
 	return m, err
 }
 
-// RetreiveManifestFromReddit will download a manifest from a specified subreddit
-func RetreiveManifestFromReddit(subreddit string) (Manifest, error) {
+// RetrieveManifestFromReddit will download a manifest from a specified subreddit
+func RetrieveManifestFromReddit(subreddit string) (Manifest, error) {
 	// https://www.reddit.com/r/[repo]/search.json?q=manifest.json&restrict_sr=on&sort=relevance&t=all
 	var m Manifest
 	url := fmt.Sprintf(`https://www.reddit.com/r/%v/search.json?q=manifest&restrict_sr=on&sort=relevance&t=all`, subreddit)
