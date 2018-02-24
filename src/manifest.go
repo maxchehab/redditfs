@@ -10,20 +10,28 @@ import (
 
 // Manifest data structure describing the location of a file
 // {
-// 	"files": [
-// 	  {
-// 		"name": "test.txt",
-// 		"path": [
-// 		  "7zp1o6"
-// 		]
-// 	  }
+// 	"repositories":[
+//    {
+// 	  "name":"My dankeroni repository",
+// 	  "files":[
+// 		 {
+// 			"name":"test.txt",
+// 			"path":[
+// 			   "7zp1o6"
+// 			]
+// 		 }
+// 	  ]
+//    }
 // 	]
 // }
 type Manifest struct {
-	Files []struct {
-		Name string   `json:"name"`
-		Path []string `json:"path"`
-	} `json:"files"`
+	Repositories []struct {
+		Name  string `json:"name"`
+		Files []struct {
+			Name string   `json:"name"`
+			Path []string `json:"path"`
+		} `json:"files"`
+	} `json:"repositories"`
 }
 
 // CreateManifestFromByteArray creates a Manifest object from a byte array
@@ -38,7 +46,6 @@ func CreateManifestFromByteArray(JSON []byte) (Manifest, error) {
 func CreateManifestFromString(JSON string) (Manifest, error) {
 	var m Manifest
 	err := json.Unmarshal([]byte(JSON), &m)
-
 	return m, err
 }
 
@@ -47,7 +54,6 @@ func RetrieveManifestFromReddit(subreddit string) (Manifest, error) {
 	// https://www.reddit.com/r/[repo]/search.json?q=manifest.json&restrict_sr=on&sort=relevance&t=all
 	var m Manifest
 	url := fmt.Sprintf(`https://www.reddit.com/r/%v/search.json?q=manifest&restrict_sr=on&sort=relevance&t=all`, subreddit)
-
 	// response, err := client.Get(request)
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {

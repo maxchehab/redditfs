@@ -34,17 +34,6 @@ func (command Command) Contains(arg string) bool {
 	return false
 }
 
-// List displays all files and directories that are available
-func List(args []string, _ []Command) error {
-	manifest, err := RetrieveManifestFromReddit(testSubreddit)
-
-	for _, file := range manifest.Files {
-		fmt.Println(file.Name)
-	}
-
-	return err
-}
-
 // Help displays all commands that are available
 func Help(args []string, commands []Command) error {
 	lines := []string{
