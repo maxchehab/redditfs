@@ -1,6 +1,11 @@
 package main
 
-import "os"
+import (
+	"fmt"
+	"os"
+
+	"github.com/ttacon/chalk"
+)
 
 func main() {
 	commands := []Command{
@@ -12,8 +17,11 @@ func main() {
 	if len(args) > 0 {
 		for _, command := range commands {
 			if command.Contains(args[0]) {
-				command.Execute(args[1:], commands)
-				return
+				err := command.Execute(args[1:], commands)
+				if err != nil {
+					fmt.Println(chalk.Red, "I'm sorry, but this command didn't work as expected.")
+					return
+				}
 			}
 		}
 	}

@@ -25,13 +25,16 @@ import (
 // 	]
 // }
 type Manifest struct {
-	Repositories []struct {
-		Name  string `json:"name"`
-		Files []struct {
-			Name string   `json:"name"`
-			Path []string `json:"path"`
-		} `json:"files"`
-	} `json:"repositories"`
+	Repositories []Repository `json:"repositories"`
+}
+
+// Repository structure
+type Repository struct {
+	Name  string `json:"name"`
+	Files []struct {
+		Name string   `json:"name"`
+		Path []string `json:"path"`
+	} `json:"files"`
 }
 
 // CreateManifestFromByteArray creates a Manifest object from a byte array
@@ -47,6 +50,23 @@ func CreateManifestFromString(JSON string) (Manifest, error) {
 	var m Manifest
 	err := json.Unmarshal([]byte(JSON), &m)
 	return m, err
+}
+
+// FilterReposByNames filters repositories with a collection of names.
+func (m Manifest) FilterReposByNames(responses []string) (repositories []Repository) {
+	for _, repo := range m.Repositories {
+		for _, response := range responses {
+			if repo.Name == response {
+				repositories = append(repositories, repo)
+			}
+		}
+	}
+	return
+}
+
+// Download a repository
+func (r Repository) Download(path string) error {
+	return errors.New(path + "/" + r.Name)
 }
 
 // RetrieveManifestFromReddit will download a manifest from a specified subreddit

@@ -1,7 +1,8 @@
 package main
 
 import (
-	"fmt"
+	"os"
+	"sync"
 
 	survey "gopkg.in/AlecAivazis/survey.v1"
 )
@@ -13,22 +14,43 @@ func List(args []string, _ []Command) error {
 		return err
 	}
 
-	var repositories []string
+	var options []string
 	for _, repo := range manifest.Repositories {
-		repositories = append(repositories, repo.Name)
+		options = append(options, repo.Name)
 	}
 
 	prompt := &survey.MultiSelect{
-		Message: "Which repositories would you like to download? (You may select more than one)",
-		Options: repositories,
+		Message: "Select repositories to download",
+		Options: options,
 	}
 	response := []string{}
 	survey.AskOne(prompt, &response, nil)
 
+	path, err := os.Getwd()
 	if err != nil {
 		return err
 	}
 
-	fmt.Printf("You choose %v\n", response)
+	repositories := manifest.FilterReposByNames(response)
+
+	var wg sync.WaitGroup
+
+	downloadResponses := make(chan error, len(repositories))
+
+	for _, repository := range repositories {
+		wg.Add(1)
+		go func(repository Repository) {
+			defer wg.Done()
+			downloadResponses <- repository.Download(path)
+		}(repository)
+	}
+	wg.Wait()
+	close(downloadResponses)
+
+	for downloadResponse := range downloadResponses {
+		if downloadResponse != nil {
+			return downloadResponse
+		}
+	}
 	return err
 }

@@ -2,7 +2,7 @@ path := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 all: src/main.go
 	cd src; go build -o ../dist/redditfs.exe
-	./dist/redditfs.exe
+	redditfs ls
 
 build: src/main.go 	
 	cd src; go build -o ../dist/redditfs.exe
@@ -17,6 +17,7 @@ install:
 	go get golang.org/x/crypto/ssh
 	go get github.com/ryanuber/columnize
 	go get gopkg.in/AlecAivazis/survey.v1
+	go get github.com/ttacon/chalk
 
 run: dist/redditfs.exe
 	./dist/redditfs.exe
