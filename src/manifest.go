@@ -16,7 +16,8 @@ import (
 // 	  "files":[
 // 		 {
 // 			"name":"test.txt",
-// 			"path":[
+// 			"path":"/",
+// 			"location":[
 // 			   "7zp1o6"
 // 			]
 // 		 }
@@ -31,10 +32,14 @@ type Manifest struct {
 // Repository structure
 type Repository struct {
 	Name  string `json:"name"`
-	Files []struct {
-		Name string   `json:"name"`
-		Path []string `json:"path"`
-	} `json:"files"`
+	Files []File `json:"files"`
+}
+
+// File structure
+type File struct {
+	Name     string   `json:"name"`
+	Path     string   `json:"path"`
+	Location []string `json:"location"`
 }
 
 // CreateManifestFromByteArray creates a Manifest object from a byte array
@@ -64,9 +69,49 @@ func (m Manifest) FilterReposByNames(responses []string) (repositories []Reposit
 	return
 }
 
+// Download a file
+func (f File) Download(path string) (err error) {
+	fmt.Println(path)
+	for _, location := range f.Location {
+		url := fmt.Sprintf(`https://www.reddit.com/r/77346c3e708a/comments/%v.json`, location)
+		request, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return err
+		}
+
+		request.Header.Set("User-Agent", userAgent)
+		client := &http.Client{}
+
+		response, err := client.Do(request)
+		if err != nil {
+			return err
+		}
+		defer response.Body.Close()
+
+		if response.StatusCode != http.StatusOK {
+			return fmt.Errorf(`bad status code, [%v]`, response.StatusCode)
+		}
+
+		JSON, err := ioutil.ReadAll(response.Body)
+		if err != nil {
+			return err
+		}
+
+		listing, err := CreateListingFromByteArray(JSON)
+		err = WriteByteStringToFile(listing.Text, path)
+		if err != nil {
+			return err
+		}
+	}
+	return
+}
+
 // Download a repository
-func (r Repository) Download(path string) error {
-	return errors.New(path + "/" + r.Name)
+func (r Repository) Download(path string) (err error) {
+	for _, file := range r.Files {
+		file.Download(path + file.Path + file.Name)
+	}
+	return
 }
 
 // RetrieveManifestFromReddit will download a manifest from a specified subreddit
@@ -74,7 +119,7 @@ func RetrieveManifestFromReddit(subreddit string) (Manifest, error) {
 	// https://www.reddit.com/r/[repo]/search.json?q=manifest.json&restrict_sr=on&sort=relevance&t=all
 	var m Manifest
 	url := fmt.Sprintf(`https://www.reddit.com/r/%v/search.json?q=manifest&restrict_sr=on&sort=relevance&t=all`, subreddit)
-	// response, err := client.Get(request)
+
 	request, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return m, err
@@ -89,7 +134,6 @@ func RetrieveManifestFromReddit(subreddit string) (Manifest, error) {
 	defer response.Body.Close()
 
 	if response.StatusCode != http.StatusOK {
-		fmt.Println(request)
 		return m, fmt.Errorf(`bad status code, [%v]`, response.StatusCode)
 	}
 

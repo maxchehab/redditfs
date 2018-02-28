@@ -10,6 +10,7 @@ import (
 // List displays all files and directories that are available
 func List(args []string, _ []Command) error {
 	manifest, err := RetrieveManifestFromReddit(testSubreddit)
+
 	if err != nil {
 		return err
 	}

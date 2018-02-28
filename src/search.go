@@ -1,6 +1,9 @@
 package main
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"errors"
+)
 
 // Search data structure describing the results of a subreddit search
 // {
@@ -25,19 +28,22 @@ import "encoding/json"
 type Search struct {
 	Data struct {
 		Children []struct {
-			Kind string `json:"kind"`
-			Data struct {
-				Subreddit string `json:"subreddit"`
-				Text      string `json:"selftext"`
-				ID        string `json:"id"`
-				Author    string `json:"author"`
-				Score     int    `json:"score"`
-				Name      string `json:"name"`
-				URL       string `json:"url"`
-				Title     string `json:"title"`
-			} `json:"data"`
+			Kind string  `json:"kind"`
+			Data Listing `json:"data"`
 		} `json:"children"`
 	} `json:"data"`
+}
+
+// Listing structure
+type Listing struct {
+	Subreddit string `json:"subreddit"`
+	Text      string `json:"selftext"`
+	ID        string `json:"id"`
+	Author    string `json:"author"`
+	Score     int    `json:"score"`
+	Name      string `json:"name"`
+	URL       string `json:"url"`
+	Title     string `json:"title"`
 }
 
 // CreateSearchFromByteArray creates a Search object from a byte array
@@ -54,4 +60,27 @@ func CreateSearchFromJSON(JSON string) (Search, error) {
 	err := json.Unmarshal([]byte(JSON), &s)
 
 	return s, err
+}
+
+// CreateListingFromByteArray creates a Listing object from a byte array
+func CreateListingFromByteArray(JSON []byte) (Listing, error) {
+	var s []Search
+	err := json.Unmarshal(JSON, &s)
+	if len(s) == 0 {
+		return Listing{}, errors.New("could not find listing")
+	}
+	if len(s[0].Data.Children) == 0 {
+		return Listing{}, errors.New("could not find listing")
+	}
+	return s[0].Data.Children[0].Data, err
+}
+
+// CreateListingFromJSON creates a Listing object from a JSON string
+func CreateListingFromJSON(JSON string) (Listing, error) {
+	var s Search
+	err := json.Unmarshal([]byte(JSON), &s)
+	if len(s.Data.Children) == 0 {
+		return Listing{}, errors.New("could not find listing")
+	}
+	return s.Data.Children[0].Data, err
 }

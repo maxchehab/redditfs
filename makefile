@@ -24,3 +24,6 @@ run: dist/redditfs.exe
 
 link: dist/redditfs.exe
 	sudo ln -s $(path)/dist/redditfs.exe /bin/redditfs
+
+test: 
+	cd src; go test
