@@ -50,7 +50,7 @@ func WriteByteStringToFile(input string, file string) (err error) {
 		os.MkdirAll(path.Dir(file), os.ModePerm)
 		os.Create(file)
 	}
-	output, err := os.OpenFile(file, os.O_TRUNC|os.O_WRONLY, 0600)
+	output, err := os.OpenFile(file, os.O_APPEND|os.O_WRONLY, 0600)
 	if err != nil {
 		panic(err)
 	}
@@ -65,7 +65,6 @@ func WriteByteStringToFile(input string, file string) (err error) {
 		b := byte(s)
 		output.Write([]byte{b})
 	}
-
 	return
 }
 

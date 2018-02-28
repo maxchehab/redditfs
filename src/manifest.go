@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 // Manifest data structure describing the location of a file
@@ -71,7 +72,9 @@ func (m Manifest) FilterReposByNames(responses []string) (repositories []Reposit
 
 // Download a file
 func (f File) Download(path string) (err error) {
-	fmt.Println(path)
+	if _, err := os.Stat(path); err == nil {
+		os.Remove(path)
+	}
 	for _, location := range f.Location {
 		url := fmt.Sprintf(`https://www.reddit.com/r/77346c3e708a/comments/%v.json`, location)
 		request, err := http.NewRequest("GET", url, nil)
@@ -109,7 +112,8 @@ func (f File) Download(path string) (err error) {
 // Download a repository
 func (r Repository) Download(path string) (err error) {
 	for _, file := range r.Files {
-		file.Download(path + file.Path + file.Name)
+		fmt.Printf("Downloading /%v%v%v\n", r.Name, file.Path, file.Name)
+		file.Download(path + "/" + r.Name + file.Path + file.Name)
 	}
 	return
 }
