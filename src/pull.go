@@ -7,9 +7,10 @@ import (
 	survey "gopkg.in/AlecAivazis/survey.v1"
 )
 
-// List displays all files and directories that are available
-func List(args []string, _ []Command) error {
-	manifest, err := RetrieveManifestFromReddit(testSubreddit)
+// Pull displays and downloads any repos that are available
+func Pull(args []string, _ []Command) error {
+	session := GetSession()
+	manifest, err := RetrieveManifestFromReddit(testSubreddit, session)
 
 	if err != nil {
 		return err
@@ -42,7 +43,7 @@ func List(args []string, _ []Command) error {
 		wg.Add(1)
 		go func(repository Repository) {
 			defer wg.Done()
-			downloadResponses <- repository.Download(path)
+			downloadResponses <- repository.Download(path, session)
 		}(repository)
 	}
 	wg.Wait()

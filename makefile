@@ -2,7 +2,6 @@ path := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 all: src/main.go
 	cd src; go build -o ../dist/redditfs.exe
-	redditfs ls
 
 build: src/main.go 	
 	cd src; go build -o ../dist/redditfs.exe

@@ -3,15 +3,28 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"path"
 	"path/filepath"
 	"strconv"
 	"strings"
-	"syscall"
 
-	"golang.org/x/crypto/ssh/terminal"
+	"github.com/maxchehab/geddit"
+	survey "gopkg.in/AlecAivazis/survey.v1"
 )
+
+// GetAllFilesInDirectory searches a provided directory and returns a slice
+// representing all files within selected directory.
+func GetAllFilesInDirectory(path string) (paths []string, err error) {
+	err = filepath.Walk(path, func(path string, f os.FileInfo, err error) error {
+		if !f.IsDir() {
+			paths = append(paths, path)
+		}
+		return nil
+	})
+	return paths, err
+}
 
 // Subfolders returns a slice of subfolders (recursive), including the folder provided.
 func Subfolders(path string) (paths []string) {
@@ -29,18 +42,18 @@ func Subfolders(path string) (paths []string) {
 }
 
 // Credentials reads username and password from stdinput
-func Credentials() (string, string) {
-	reader := bufio.NewReader(os.Stdin)
+func Credentials() (username string, password string) {
 
-	fmt.Print("Enter Username: ")
-	username, _ := reader.ReadString('\n')
+	usernamePrompt := &survey.Input{
+		Message: "Username:",
+	}
+	passwordPrompt := &survey.Password{
+		Message: "Pasword:",
+	}
 
-	fmt.Print("Enter Password: ")
-	bytePassword, _ := terminal.ReadPassword(int(syscall.Stdin))
-
-	password := string(bytePassword)
-
-	return strings.TrimSpace(username), strings.TrimSpace(password)
+	survey.AskOne(usernamePrompt, &username, nil)
+	survey.AskOne(passwordPrompt, &password, nil)
+	return
 }
 
 // WriteByteStringToFile takes a string of bytes seperated by a space
@@ -64,6 +77,29 @@ func WriteByteStringToFile(input string, file string) (err error) {
 		}
 		b := byte(s)
 		output.Write([]byte{b})
+	}
+	return
+}
+
+// UploadFileByPath uploads a file and returns a file object
+func UploadFileByPath(path string, selectedPath string, session *geddit.OAuthSession) (file File, err error) {
+	fmt.Printf("Uploading %v", path)
+	buffer := make([]byte, 8192)
+	input, err := os.Open(path)
+	if err != nil {
+		return file, err
+	}
+
+	for {
+		_, err := io.ReadFull(input, buffer)
+		if err == io.EOF {
+			break
+		} else {
+			_, err := file.UploadBuffer(buffer, session)
+			if err != nil {
+				return file, err
+			}
+		}
 	}
 	return
 }

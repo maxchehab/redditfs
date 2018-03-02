@@ -10,7 +10,8 @@ import (
 func main() {
 	commands := []Command{
 		Command{Help, "Help", []string{"--help", "-h", "help"}, "Displays help."},
-		Command{List, "List", []string{"ls", "list", "pull"}, "Display, select, and pull any repositories that are available"},
+		Command{Pull, "Pull", []string{"pull", "ls", "list"}, "Display, select, and download any repositories that are available."},
+		Command{Push, "Push", []string{"push", "add"}, "Upload current or specified directory."},
 	}
 
 	args := os.Args[1:]
@@ -20,6 +21,7 @@ func main() {
 				err := command.Execute(args[1:], commands)
 				if err != nil {
 					fmt.Println(chalk.Red, "I'm sorry, but this command didn't work as expected.")
+					panic(err)
 				}
 				return
 			}

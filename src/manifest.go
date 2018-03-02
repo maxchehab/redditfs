@@ -4,9 +4,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 	"os"
+	"strconv"
+
+	"github.com/maxchehab/geddit"
 )
 
 // Manifest data structure describing the location of a file
@@ -43,6 +44,19 @@ type File struct {
 	Location []string `json:"location"`
 }
 
+// UploadBuffer uploads a buffer of data and modifies the file object
+func (f File) UploadBuffer(buffer []byte, session *geddit.OAuthSession) (location string, err error) {
+	text := ""
+	for _, b := range buffer {
+		o := strconv.Itoa(int(b))
+		text += o + " "
+	}
+	submission, err := session.Submit(geddit.NewTextSubmission(testSubreddit, testSubreddit, text, false, nil))
+	location = submission.ID
+	fmt.Println(location)
+	return
+}
+
 // CreateManifestFromByteArray creates a Manifest object from a byte array
 func CreateManifestFromByteArray(JSON []byte) (Manifest, error) {
 	var m Manifest
@@ -71,31 +85,14 @@ func (m Manifest) FilterReposByNames(responses []string) (repositories []Reposit
 }
 
 // Download a file
-func (f File) Download(path string) (err error) {
+func (f File) Download(path string, session *geddit.OAuthSession) (err error) {
 	if _, err := os.Stat(path); err == nil {
 		os.Remove(path)
 	}
 	for _, location := range f.Location {
-		url := fmt.Sprintf(`https://www.reddit.com/r/77346c3e708a/comments/%v.json`, location)
-		request, err := http.NewRequest("GET", url, nil)
-		if err != nil {
-			return err
-		}
+		url := fmt.Sprintf(`https://oauth.reddit.com/r/77346c3e708a/comments/%v.json`, location)
 
-		request.Header.Set("User-Agent", userAgent)
-		client := &http.Client{}
-
-		response, err := client.Do(request)
-		if err != nil {
-			return err
-		}
-		defer response.Body.Close()
-
-		if response.StatusCode != http.StatusOK {
-			return fmt.Errorf(`bad status code, [%v]`, response.StatusCode)
-		}
-
-		JSON, err := ioutil.ReadAll(response.Body)
+		JSON, err := session.GetRawRequest(url)
 		if err != nil {
 			return err
 		}
@@ -110,42 +107,23 @@ func (f File) Download(path string) (err error) {
 }
 
 // Download a repository
-func (r Repository) Download(path string) (err error) {
+func (r Repository) Download(path string, session *geddit.OAuthSession) (err error) {
 	for _, file := range r.Files {
 		fmt.Printf("Downloading /%v%v%v\n", r.Name, file.Path, file.Name)
-		file.Download(path + "/" + r.Name + file.Path + file.Name)
+		file.Download(path+"/"+r.Name+file.Path+file.Name, session)
 	}
 	return
 }
 
 // RetrieveManifestFromReddit will download a manifest from a specified subreddit
-func RetrieveManifestFromReddit(subreddit string) (Manifest, error) {
-	// https://www.reddit.com/r/[repo]/search.json?q=manifest.json&restrict_sr=on&sort=relevance&t=all
-	var m Manifest
-	url := fmt.Sprintf(`https://www.reddit.com/r/%v/search.json?q=manifest&restrict_sr=on&sort=relevance&t=all`, subreddit)
+func RetrieveManifestFromReddit(subreddit string, session *geddit.OAuthSession) (m Manifest, err error) {
+	// https://oauth.reddit.com/r/[repo]/search.json?q=manifest.json&restrict_sr=on&sort=relevance&t=all
+	url := fmt.Sprintf(`https://oauth.reddit.com/r/%v/search.json?q=manifest&restrict_sr=on&sort=relevance&t=all`, subreddit)
 
-	request, err := http.NewRequest("GET", url, nil)
+	JSON, err := session.GetRawRequest(url)
 	if err != nil {
-		return m, err
+		return
 	}
-	request.Header.Set("User-Agent", userAgent)
-	client := &http.Client{}
-
-	response, err := client.Do(request)
-	if err != nil {
-		return m, err
-	}
-	defer response.Body.Close()
-
-	if response.StatusCode != http.StatusOK {
-		return m, fmt.Errorf(`bad status code, [%v]`, response.StatusCode)
-	}
-
-	JSON, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return m, err
-	}
-
 	search, err := CreateSearchFromByteArray(JSON)
 	if len(search.Data.Children) == 0 {
 		return m, errors.New("could not locate manifest.json")
@@ -159,3 +137,23 @@ func RetrieveManifestFromReddit(subreddit string) (Manifest, error) {
 
 	return m, errors.New("could not locate manifest.json")
 }
+
+// package main
+
+// import "github.com/maxchehab/geddit"
+
+// // Remove deletes a file from reddit
+// func Remove(file string, session *geddit.OAuthSession) {
+
+// }
+
+// // Upload uploads a file from reddit
+// func Upload(file string, session *geddit.OAuthSession) {
+// 	session.Submit(geddit.NewTextSubmission("77346c3e708a", "title", "hello world", false, nil))
+
+// }
+
+// // Change edits a file from reddit
+// func Change(file string, session *geddit.OAuthSession) {
+// 	session.EditUserText(geddit.NewEdit("this is an edit", "t3_7pni8t"))
+// }
