@@ -44,16 +44,28 @@ type File struct {
 	Location []string `json:"location"`
 }
 
+// Contains checks if a manifest contians selected repository
+func (m *Manifest) Contains(repository Repository) bool {
+	for _, repo := range m.Repositories {
+		if repo.Name == repository.Name {
+			return true
+		}
+	}
+	return false
+}
+
 // UploadBuffer uploads a buffer of data and modifies the file object
-func (f File) UploadBuffer(buffer []byte, session *geddit.OAuthSession) (location string, err error) {
+func (f *File) UploadBuffer(buffer []byte, session *geddit.OAuthSession) (err error) {
 	text := ""
 	for _, b := range buffer {
 		o := strconv.Itoa(int(b))
 		text += o + " "
 	}
 	submission, err := session.Submit(geddit.NewTextSubmission(testSubreddit, testSubreddit, text, false, nil))
-	location = submission.ID
-	fmt.Println(location)
+	if err != nil {
+		return
+	}
+	f.Location = append(f.Location, submission.ID)
 	return
 }
 

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"path"
 	"sync"
 
 	"github.com/ttacon/chalk"
@@ -10,7 +11,7 @@ import (
 )
 
 // Push displays all files and directories that are available
-func Push(args []string, _ []Command) error {
+func Push(args []string, _ []Command) (err error) {
 	session := GetSession()
 	manifest, err := RetrieveManifestFromReddit(testSubreddit, session)
 
@@ -28,7 +29,7 @@ func Push(args []string, _ []Command) error {
 		return err
 	}
 
-	message := fmt.Sprintf("Confirm push of repository [%v%v%v]", chalk.Cyan, selectedPath, chalk.Reset)
+	message := fmt.Sprintf("Confirm push of repository [%v%v%v]", chalk.Cyan, path.Base(selectedPath), chalk.Reset)
 
 	confirm := false
 	prompt := &survey.Confirm{
@@ -67,5 +68,33 @@ func Push(args []string, _ []Command) error {
 			return err
 		}
 	}
-	return err
+
+	var respository Repository
+	respository.Name = path.Base(selectedPath)
+	for file := range files {
+		respository.Files = append(respository.Files, file)
+	}
+
+	if manifest.Contains(respository) {
+		message := fmt.Sprintf("The repository [%v%v%v] has already been created. Would you like to update or rename the repository.", chalk.Cyan, respository.Name, chalk.Reset)
+		action := ""
+		prompt := &survey.Select{
+			Message: message,
+			Options: []string{"update", "rename"},
+		}
+		survey.AskOne(prompt, &action, nil)
+
+		if action == "rename" {
+			message = fmt.Sprintf("Rename [%v%v%v] to:", chalk.Cyan, respository.Name, chalk.Reset)
+			rename := ""
+			prompt := &survey.Input{
+				Message: message,
+			}
+			survey.AskOne(prompt, &rename, nil)
+			Prompt(fmt.Sprintf("Renamed [%v%v%v] to [%v%v%v]", chalk.Cyan, respository.Name, chalk.ResetColor, chalk.Cyan, rename, chalk.ResetColor))
+			respository.Name = rename
+		}
+	}
+	Prompt(fmt.Sprintf("Updating manifest for [%v%v%v]", chalk.Cyan, respository.Name, chalk.ResetColor))
+	return
 }

@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/maxchehab/geddit"
+	"github.com/ttacon/chalk"
 	survey "gopkg.in/AlecAivazis/survey.v1"
 )
 
@@ -48,12 +49,17 @@ func Credentials() (username string, password string) {
 		Message: "Username:",
 	}
 	passwordPrompt := &survey.Password{
-		Message: "Pasword:",
+		Message: "Password:",
 	}
 
 	survey.AskOne(usernamePrompt, &username, nil)
 	survey.AskOne(passwordPrompt, &password, nil)
 	return
+}
+
+//Prompt will display an interface on the screen
+func Prompt(input interface{}) {
+	fmt.Println(chalk.Bold.TextStyle(fmt.Sprintf("%v>%v %v", chalk.Green, chalk.ResetColor, input)))
 }
 
 // WriteByteStringToFile takes a string of bytes seperated by a space
@@ -82,10 +88,14 @@ func WriteByteStringToFile(input string, file string) (err error) {
 }
 
 // UploadFileByPath uploads a file and returns a file object
-func UploadFileByPath(path string, selectedPath string, session *geddit.OAuthSession) (file File, err error) {
-	fmt.Printf("Uploading %v", path)
+func UploadFileByPath(absolutePath string, selectedPath string, session *geddit.OAuthSession) (file File, err error) {
+	relativePath := absolutePath[len(selectedPath):]
+	Prompt(fmt.Sprintf("Uploading %v%v%v", chalk.Cyan, relativePath[1:], chalk.Cyan))
+	file.Path = path.Dir(relativePath)
+	file.Name = path.Base(relativePath)
 	buffer := make([]byte, 8192)
-	input, err := os.Open(path)
+
+	input, err := os.Open(absolutePath)
 	if err != nil {
 		return file, err
 	}
@@ -95,7 +105,7 @@ func UploadFileByPath(path string, selectedPath string, session *geddit.OAuthSes
 		if err == io.EOF {
 			break
 		} else {
-			_, err := file.UploadBuffer(buffer, session)
+			err := file.UploadBuffer(buffer, session)
 			if err != nil {
 				return file, err
 			}
@@ -103,38 +113,3 @@ func UploadFileByPath(path string, selectedPath string, session *geddit.OAuthSes
 	}
 	return
 }
-
-// input, _ := os.Open("./test/input.jpg")
-
-// output, _ := os.OpenFile("./test/middle.csv", os.O_APPEND|os.O_WRONLY, 0600)
-
-// buf := make([]byte, 2048)
-// for {
-// 	_, err := io.ReadFull(input, buf)
-// 	if err == io.EOF {
-// 		break
-// 	} else {
-// 		for _, b := range buf {
-// 			o := strconv.Itoa(int(b))
-// 			io.WriteString(output, o+" ")
-// 		}
-// 	}
-// }
-// input.Close()
-// output.Close()
-
-// input, _ = os.Open("./test/middle.csv")
-// output, _ = os.OpenFile("./test/output.jpg", os.O_APPEND|os.O_WRONLY, 0600)
-// scanner := bufio.NewScanner(input)
-// scanner.Split(bufio.ScanWords)
-// for scanner.Scan() {
-// 	s, err := strconv.Atoi(scanner.Text())
-// 	if err != nil {
-// 		panic(err)
-// 	}
-// 	b := byte(s)
-// 	output.Write([]byte{b})
-// }
-
-// input.Close()
-// output.Close()
