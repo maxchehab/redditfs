@@ -6,6 +6,7 @@ import (
 	"path"
 	"sync"
 
+	"github.com/maxchehab/geddit"
 	"github.com/ttacon/chalk"
 	survey "gopkg.in/AlecAivazis/survey.v1"
 )
@@ -93,8 +94,17 @@ func Push(args []string, _ []Command) (err error) {
 			survey.AskOne(prompt, &rename, nil)
 			Prompt(fmt.Sprintf("Renamed [%v%v%v] to [%v%v%v]", chalk.Cyan, respository.Name, chalk.ResetColor, chalk.Cyan, rename, chalk.ResetColor))
 			respository.Name = rename
+			manifest.Repositories = append(manifest.Repositories, respository)
+		} else {
+			manifest.Update(respository)
 		}
+	} else {
+		manifest.Repositories = append(manifest.Repositories, respository)
 	}
+
 	Prompt(fmt.Sprintf("Updating manifest for [%v%v%v]", chalk.Cyan, respository.Name, chalk.ResetColor))
+	fmt.Println(manifest.ToString())
+	session.EditUserText(geddit.NewEdit(manifest.ToString(), "t3_"+manifest.Location))
+
 	return
 }

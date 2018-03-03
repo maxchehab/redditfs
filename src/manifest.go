@@ -29,6 +29,7 @@ import (
 // }
 type Manifest struct {
 	Repositories []Repository `json:"repositories"`
+	Location     string
 }
 
 // Repository structure
@@ -52,6 +53,21 @@ func (m *Manifest) Contains(repository Repository) bool {
 		}
 	}
 	return false
+}
+
+// Update updeates a manifest's repository given a provided repository
+func (m *Manifest) Update(repository Repository) {
+	for index := range m.Repositories {
+		if m.Repositories[index].Name == repository.Name {
+			m.Repositories[index] = repository
+		}
+	}
+}
+
+// ToString converts a selected manifest to a JSON string
+func (m Manifest) ToString() string {
+	b, _ := json.Marshal(m)
+	return string(b)
 }
 
 // UploadBuffer uploads a buffer of data and modifies the file object
@@ -143,29 +159,14 @@ func RetrieveManifestFromReddit(subreddit string, session *geddit.OAuthSession) 
 
 	for _, listing := range search.Data.Children {
 		if listing.Data.Subreddit == subreddit && listing.Data.Title == "manifest.json" {
-			return CreateManifestFromString(listing.Data.Text)
+			m, err := CreateManifestFromString(listing.Data.Text)
+			if err != nil {
+				return m, err
+			}
+			m.Location = listing.Data.ID
+			return m, err
 		}
 	}
 
 	return m, errors.New("could not locate manifest.json")
 }
-
-// package main
-
-// import "github.com/maxchehab/geddit"
-
-// // Remove deletes a file from reddit
-// func Remove(file string, session *geddit.OAuthSession) {
-
-// }
-
-// // Upload uploads a file from reddit
-// func Upload(file string, session *geddit.OAuthSession) {
-// 	session.Submit(geddit.NewTextSubmission("77346c3e708a", "title", "hello world", false, nil))
-
-// }
-
-// // Change edits a file from reddit
-// func Change(file string, session *geddit.OAuthSession) {
-// 	session.EditUserText(geddit.NewEdit("this is an edit", "t3_7pni8t"))
-// }
