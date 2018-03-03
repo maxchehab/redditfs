@@ -90,8 +90,8 @@ func WriteByteStringToFile(input string, file string) (err error) {
 // UploadFileByPath uploads a file and returns a file object
 func UploadFileByPath(absolutePath string, selectedPath string, session *geddit.OAuthSession) (file File, err error) {
 	relativePath := absolutePath[len(selectedPath):]
-	Prompt(fmt.Sprintf("Uploading %v%v%v", chalk.Cyan, relativePath[1:], chalk.Cyan))
-	file.Path = path.Dir(relativePath)
+	Prompt(fmt.Sprintf("Uploading %v%v%v", chalk.Cyan, relativePath, chalk.Cyan))
+	file.Path = path.Dir(relativePath) + "/"
 	file.Name = path.Base(relativePath)
 	buffer := make([]byte, 8192)
 
