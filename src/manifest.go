@@ -137,7 +137,7 @@ func (f File) Download(path string, session *geddit.OAuthSession) (err error) {
 // Download a repository
 func (r Repository) Download(path string, session *geddit.OAuthSession) (err error) {
 	for _, file := range r.Files {
-		fmt.Printf("Downloading /%v%v%v\n", r.Name, file.Path, file.Name)
+		Prompt(fmt.Sprintf("Downloading /%v%v%v", r.Name, file.Path, file.Name))
 		file.Download(path+"/"+r.Name+file.Path+file.Name, session)
 	}
 	return

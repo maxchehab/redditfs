@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -118,7 +119,13 @@ func WriteByteStringToFile(input string, file string) (err error) {
 func UploadFileByPath(absolutePath string, selectedPath string, session *geddit.OAuthSession) (file File, err error) {
 	relativePath := absolutePath[len(selectedPath):]
 	Prompt(fmt.Sprintf("Uploading %v%v%v", chalk.Cyan, relativePath, chalk.Cyan))
-	file.Path = path.Dir(relativePath) + "/"
+	// file.Path = path.Dir(relativePath) + "/"
+	relativePathDir := path.Dir(relativePath)
+	if relativePathDir[len(relativePathDir)-1:] == "/" {
+		file.Path = relativePathDir
+	} else {
+		file.Path = relativePathDir + "/"
+	}
 	file.Name = path.Base(relativePath)
 	buffer := make([]byte, 8192)
 
@@ -132,6 +139,7 @@ func UploadFileByPath(absolutePath string, selectedPath string, session *geddit.
 		if err == io.EOF {
 			break
 		} else {
+			buffer = bytes.Trim(buffer, string(byte(0)))
 			err := file.UploadBuffer(buffer, session)
 			if err != nil {
 				return file, err
