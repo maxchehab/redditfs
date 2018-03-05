@@ -17,6 +17,7 @@ install:
 	go get github.com/ryanuber/columnize
 	go get gopkg.in/AlecAivazis/survey.v1
 	go get github.com/ttacon/chalk
+	go get github.com/monochromegane/go-gitignore
 
 run: dist/redditfs.exe
 	./dist/redditfs.exe

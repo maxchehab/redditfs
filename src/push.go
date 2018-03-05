@@ -103,7 +103,6 @@ func Push(args []string, _ []Command) (err error) {
 	}
 
 	Prompt(fmt.Sprintf("Updating manifest for [%v%v%v]", chalk.Cyan, respository.Name, chalk.ResetColor))
-	fmt.Println(manifest.ToString())
 	session.EditUserText(geddit.NewEdit(manifest.ToString(), "t3_"+manifest.Location))
 
 	return

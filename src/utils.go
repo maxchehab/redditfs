@@ -11,16 +11,43 @@ import (
 	"strings"
 
 	"github.com/maxchehab/geddit"
+	gitignore "github.com/monochromegane/go-gitignore"
 	"github.com/ttacon/chalk"
 	survey "gopkg.in/AlecAivazis/survey.v1"
 )
 
+// FileExists checks fi a path to a file exists
+func FileExists(path string) bool {
+	if _, err := os.Stat(path); err == nil {
+		return true
+	}
+	return false
+}
+
 // GetAllFilesInDirectory searches a provided directory and returns a slice
 // representing all files within selected directory.
 func GetAllFilesInDirectory(path string) (paths []string, err error) {
+	var ignoreMatcher gitignore.IgnoreMatcher
+	gitIgnoreExists := FileExists(path + "/.redditfsignore")
+	if gitIgnoreExists {
+		ignoreMatcher, err = gitignore.NewGitIgnore(path + "/.redditfsignore")
+		fmt.Println(gitIgnoreExists)
+		if err != nil {
+			return paths, err
+		}
+	}
+
 	err = filepath.Walk(path, func(path string, f os.FileInfo, err error) error {
 		if !f.IsDir() {
-			paths = append(paths, path)
+			if gitIgnoreExists {
+				if !ignoreMatcher.Match(path, false) {
+					paths = append(paths, path)
+				}
+			} else {
+				paths = append(paths, path)
+			}
+		} else if gitIgnoreExists && ignoreMatcher.Match(path, true) {
+			return filepath.SkipDir
 		}
 		return nil
 	})
