@@ -71,13 +71,13 @@ func (m Manifest) ToString() string {
 }
 
 // UploadBuffer uploads a buffer of data and modifies the file object
-func (f *File) UploadBuffer(buffer []byte, session *geddit.OAuthSession) (err error) {
+func (f *File) UploadBuffer(buffer []byte, session *geddit.OAuthSession, subreddit string) (err error) {
 	text := ""
 	for _, b := range buffer {
 		o := strconv.Itoa(int(b))
 		text += o + " "
 	}
-	submission, err := session.Submit(geddit.NewTextSubmission(testSubreddit, testSubreddit, text, false, nil))
+	submission, err := session.Submit(geddit.NewTextSubmission(subreddit, subreddit, text, false, nil))
 	if err != nil {
 		return
 	}

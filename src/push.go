@@ -13,8 +13,13 @@ import (
 
 // Push displays all files and directories that are available
 func Push(args []string, _ []Command) (err error) {
-	session := GetSession()
-	manifest, err := RetrieveManifestFromReddit(testSubreddit, session)
+	username, password, subreddit := GetCredentials()
+	session, err := GetSession(username, password)
+	if err != nil {
+		return err
+	}
+
+	manifest, err := RetrieveManifestFromReddit(subreddit, session)
 
 	if err != nil {
 		return err
@@ -55,7 +60,7 @@ func Push(args []string, _ []Command) (err error) {
 		wg.Add(1)
 		go func(path string) {
 			defer wg.Done()
-			file, err := UploadFileByPath(path, selectedPath, session)
+			file, err := UploadFileByPath(path, selectedPath, session, subreddit)
 			files <- file
 			fileErrors <- err
 		}(path)

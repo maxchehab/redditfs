@@ -9,8 +9,13 @@ import (
 
 // Pull displays and downloads any repos that are available
 func Pull(args []string, _ []Command) error {
-	session := GetSession()
-	manifest, err := RetrieveManifestFromReddit(testSubreddit, session)
+	username, password, subreddit := GetCredentials()
+	session, err := GetSession(username, password)
+	if err != nil {
+		return err
+	}
+
+	manifest, err := RetrieveManifestFromReddit(subreddit, session)
 
 	if err != nil {
 		return err
