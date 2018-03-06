@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"errors"
 	"fmt"
 	"os"
 	"strconv"
@@ -154,7 +153,7 @@ func RetrieveManifestFromReddit(subreddit string, session *geddit.OAuthSession) 
 	}
 	search, err := CreateSearchFromByteArray(JSON)
 	if len(search.Data.Children) == 0 {
-		return m, errors.New("could not locate manifest.json")
+		return m, nil
 	}
 
 	for _, listing := range search.Data.Children {
@@ -168,5 +167,5 @@ func RetrieveManifestFromReddit(subreddit string, session *geddit.OAuthSession) 
 		}
 	}
 
-	return m, errors.New("could not locate manifest.json")
+	return
 }

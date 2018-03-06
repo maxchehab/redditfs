@@ -58,7 +58,7 @@ func Push(args []string, _ []Command) (err error) {
 	fileErrors := make(chan error, len(pathsToUpload))
 	for _, path := range pathsToUpload {
 		wg.Add(1)
-		go func(path string) {
+		func(path string) {
 			defer wg.Done()
 			file, err := UploadFileByPath(path, selectedPath, session, subreddit)
 			files <- file
@@ -108,7 +108,11 @@ func Push(args []string, _ []Command) (err error) {
 	}
 
 	Prompt(fmt.Sprintf("Updating manifest for [%v%v%v]", chalk.Cyan, respository.Name, chalk.ResetColor))
-	session.EditUserText(geddit.NewEdit(manifest.ToString(), "t3_"+manifest.Location))
+	if len(manifest.Location) > 0 {
+		session.EditUserText(geddit.NewEdit(manifest.ToString(), "t3_"+manifest.Location))
+	} else {
+		session.Submit(geddit.NewTextSubmission(subreddit, "manifest.json", manifest.ToString(), false, nil))
+	}
 
 	return
 }
