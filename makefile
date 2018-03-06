@@ -1,13 +1,13 @@
 path := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-all: src/main.go
-	cd src; go build -o ../dist/redditfs.exe
+all: main.go
+	go build
 
-build: src/main.go 	
-	cd src; go build -o ../dist/redditfs.exe
+build: main.go
+	go build
 
 clean: 
-	$(RM) ./dist/redditfs.exe
+	$(RM) redditfs
 
 install:
 	go get -u golang.org/x/sys/...
@@ -20,10 +20,7 @@ install:
 	go get github.com/monochromegane/go-gitignore
 
 run: dist/redditfs.exe
-	./dist/redditfs.exe
+	./redditfs
 
 link: dist/redditfs.exe
-	sudo ln -s $(path)/dist/redditfs.exe /bin/redditfs
-
-test: 
-	cd src; go test
+	sudo ln -s $(path)redditfs /bin/redditfs
