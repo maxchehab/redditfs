@@ -27,11 +27,17 @@ To install, download a distribution binary. Feel free to download and build from
 The first time you use redditfs, you will be asked to create an [authorized reddit application](https://www.reddit.com/prefs/apps/).
 To create and obtain the correct credentials, do the following:
 
-1.  Go to http://www.reddit.com/prefs/apps/.
-2.  Press the button on the bottom.
-    ![Press the button on the bottom](https://github.com/maxchehab/redditfs/blob/master/images/image2.png?raw=true)
-3.  Fill out the information
-    ![Fill out the information](https://github.com/maxchehab/redditfs/blob/master/images/image1.png?raw=true)
+1.  Create a subreddit. Preferably make this private.
+2.  Go to http://www.reddit.com/prefs/apps/.
+3.  Press the button on the bottom.
+    ![Press the button on the bottom](https://github.com/maxchehab/redditfs/blob/master/images/image1.png?raw=true)
+4.  Fill out the information
+    ![Fill out the information](https://github.com/maxchehab/redditfs/blob/master/images/image2.png?raw=true)
+5.  The following circled information is important.
+    ![The following circled information is important](https://github.com/maxchehab/redditfs/blob/master/images/image3.png?raw=true)
+6.  When prompted fill out the relevent information.
+    ![When prompted fill out the relevent information](https://github.com/maxchehab/redditfs/blob/master/images/image4.png?raw=true)
+7.  ![Voila](https://media.giphy.com/media/5heSxZbRPE2Ee6QaDi/giphy.gif)
 
 #### Create authorized application
 
