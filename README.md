@@ -77,8 +77,6 @@ node_modules/
 
 This will ignore everything inside of a `dist`, `node_modules`, and `.vscode` directory.
 
-<<<<<<< HEAD
-
 ## P.S.
 
 I have only tested this on Debian Linux, therefore I can only confirm it works on my machine. For all y'all fancy programmers who can afford Macbook Pro's....
