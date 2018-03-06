@@ -79,7 +79,7 @@ This will ignore everything inside of a `dist`, `node_modules`, and `.vscode` di
 
 <<<<<<< HEAD
 
-## PS
+## P.S.
 
 I have only tested this on Debian Linux, therefore I can only confirm it works on my machine. For all y'all fancy programmers who can afford Macbook Pro's....
 
@@ -94,3 +94,7 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE.md](LICENS
 ## Contact
 
 Feel free to reachout to me at [twitter](https://twitter.com/maxchehab) or leave report an [issue](https://github.com/maxchehab/redditfs/issues) if there are any problems.
+
+
+## P.S.S.
+This is a joke.
