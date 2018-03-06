@@ -32,21 +32,43 @@ To create and obtain the correct credentials, do the following:
 3.  Press the button on the bottom.
 
     ![Press the button on the bottom](https://github.com/maxchehab/redditfs/blob/master/images/image1.png?raw=true)
+
 4.  Fill out the information
 
     ![Fill out the information](https://github.com/maxchehab/redditfs/blob/master/images/image2.png?raw=true)
+
 5.  The following circled information is important.
 
     ![The following circled information is important](https://github.com/maxchehab/redditfs/blob/master/images/image3.png?raw=true)
+
 6.  When prompted fill out the relevent information.
 
     ![When prompted fill out the relevent information](https://github.com/maxchehab/redditfs/blob/master/images/image4.png?raw=true)
+
 7.  Voila!
 
     ![Voila](https://media.giphy.com/media/5heSxZbRPE2Ee6QaDi/giphy.gif)
 
-## Commands
+## Features
 
-#### Pull `redditfs pull`
+#### Pull
 
-#### Push `redditfs push`
+`redditfs pull` will display, select, and download any repositories that are available into the current directory.
+
+#### Push
+
+`redditfs push` will upload current directory.
+
+#### .redditfsignore
+
+A `redditfsignore` file specifies intentionally untracked files that Redditfs should ignore.
+
+For example:
+
+```git
+    dist/
+    node_modules/
+    .vscode/
+```
+
+This will ignore everything inside of a `dist`, `node_modules`, and `.vscode` directory.

@@ -11,7 +11,7 @@ func main() {
 	commands := []Command{
 		Command{Help, "Help", []string{"--help", "-h", "help"}, "Displays help."},
 		Command{Pull, "Pull", []string{"pull", "ls", "list"}, "Display, select, and download any repositories that are available."},
-		Command{Push, "Push", []string{"push", "add"}, "Upload current or specified directory."},
+		Command{Push, "Push", []string{"push", "add"}, "Upload current directory."},
 	}
 
 	args := os.Args[1:]
