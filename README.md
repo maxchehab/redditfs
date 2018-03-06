@@ -29,9 +29,9 @@ To create and obtain the correct credentials, do the following:
 
 1.  Go to http://www.reddit.com/prefs/apps/.
 2.  Press the button on the bottom.
-    ![Press the button on the bottom](https://github.com/maxchehab/redditfs/blob/master/image/image2.png)
+    ![Press the button on the bottom](https://github.com/maxchehab/redditfs/blob/master/images/image2.png?raw=true)
 3.  Fill out the information
-    ![Fill out the information](https://github.com/maxchehab/redditfs/blob/master/image/image1.png)
+    ![Fill out the information](https://github.com/maxchehab/redditfs/blob/master/images/image1.png?raw=true)
 
 #### Create authorized application
 
