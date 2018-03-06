@@ -20,7 +20,7 @@ Redditfs is a command line interface to manage repositories that are stored, fre
 
 # How
 
-To install, download a distribution binary. Feel free to download and build from source (makefile) included.
+Install [golang](https://golang.org/dl/), setup a [gopath](https://github.com/golang/go/wiki/SettingGOPATH), and `go get github.com/maxchehab/redditfs; go install github.com/maxchehab/redditfs`
 
 ### Creating an authorized application
 
@@ -73,6 +73,7 @@ node_modules/
 
 This will ignore everything inside of a `dist`, `node_modules`, and `.vscode` directory.
 
+<<<<<<< HEAD
 ## PS
 
 I have only tested this on Debian Linux, therefore I can only confirm it works on my machine. For all y'all fancy programmers who can afford Macbook Pro's....
@@ -86,3 +87,8 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE.md](LICENS
 ## Contact
 
 Feel free to reachout to me at [twitter](https://twitter.com/maxchehab) or leave report an [issue](https://github.com/maxchehab/redditfs/issues) if there are any problems.
+=======
+
+
+Leave 
+>>>>>>> 17585eefc09341a5927a541ec6663de952082f1d
