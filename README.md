@@ -61,14 +61,14 @@ To create and obtain the correct credentials, do the following:
 
 #### .redditfsignore
 
-A `redditfsignore` file specifies intentionally untracked files that Redditfs should ignore.
+A `.redditfsignore` file specifies intentionally untracked files that Redditfs should ignore. This file should be located in the root of your repository
 
 For example:
 
 ```git
-    dist/
-    node_modules/
-    .vscode/
+dist/
+node_modules/
+.vscode/
 ```
 
 This will ignore everything inside of a `dist`, `node_modules`, and `.vscode` directory.
