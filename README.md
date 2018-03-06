@@ -20,7 +20,7 @@ Redditfs is a command line interface to manage repositories that are stored, fre
 
 # How
 
-Install [golang](https://golang.org/dl/), setup a [gopath](https://github.com/golang/go/wiki/SettingGOPATH), and `go install github.com/maxchehab/redditfs`
+Install [golang](https://golang.org/dl/), setup a [gopath](https://github.com/golang/go/wiki/SettingGOPATH), and `go get github.com/maxchehab/redditfs; go install github.com/maxchehab/redditfs`
 
 ### Creating an authorized application
 
@@ -72,3 +72,7 @@ node_modules/
 ```
 
 This will ignore everything inside of a `dist`, `node_modules`, and `.vscode` directory.
+
+
+
+Leave 
