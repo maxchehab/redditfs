@@ -19,7 +19,7 @@ The feather on your fedora just tingled.
 Redditfs is a command line interface to manage repositories that are stored, free of charge, on reddit.
 
 <p align="center">
-  <img src="https://github.com/maxchehab/redditfs/blob/master/images/demo.gif?raw=true" width="600px" />
+  <img src="https://github.com/maxchehab/redditfs/blob/master/images/demo.gif?raw=true" />
 </p>
 
 # How
