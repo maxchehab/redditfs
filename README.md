@@ -7,7 +7,7 @@ You are about submit your final pull request.
 
 Is the world ready for your masterpeice?
 Do they really deserve this perfection of 1's and 0's? You check your bitcoin wallet, 899... 1872... 443... 210...
-crap, it's fluctating again, this is no time for a payout. GitHub's private repo's are too expensive, for you've spent this months
+crap, it's fluctuating again, this is no time for a payout. GitHub's private repo's are too expensive, for you've spent this months
 allowance on macchiatos and biscottis at the local coffee shop.
 
 Wait, what is this? A state-of-the-art peer-to-peer file-transfer-protocal that hides your files in plain site?
