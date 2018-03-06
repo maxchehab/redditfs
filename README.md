@@ -61,7 +61,7 @@ To create and obtain the correct credentials, do the following:
 
 #### Push
 
-`redditfs push` will upload current directory.
+`redditfs push` will upload the current directory.
 
 #### .redditfsignore
 
@@ -91,8 +91,8 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE.md](LICENS
 
 ## Contact
 
-Feel free to reachout to me at [twitter](https://twitter.com/maxchehab) or leave report an [issue](https://github.com/maxchehab/redditfs/issues) if there are any problems.
-
+Feel free to reachout to me at [twitter](https://twitter.com/maxchehab) or report an [issue](https://github.com/maxchehab/redditfs/issues) if there are any problems.
 
 ## P.S.S.
+
 This is a joke.
