@@ -20,7 +20,7 @@ func main() {
 			if command.Contains(args[0]) {
 				err := command.Execute(args[1:], commands)
 				if err != nil {
-					fmt.Println(chalk.Red, "I'm sorry, but this command didn't work as expected.")
+					fmt.Println(chalk.Red, "I'm sorry, but this command didn't work as expected.", chalk.Reset)
 					panic(err)
 				}
 				return
