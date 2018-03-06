@@ -28,7 +28,7 @@ func GetSession(username string, password string) (session *geddit.OAuthSession,
 		id,
 		secret,
 		name,
-		"",
+		"http://maxchehab.com",
 	)
 
 	if err != nil {
