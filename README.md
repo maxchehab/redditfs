@@ -18,6 +18,10 @@ The feather on your fedora just tingled.
 
 Redditfs is a command line interface to manage repositories that are stored, free of charge, on reddit.
 
+<p align="center">
+  <img src="https://github.com/maxchehab/redditfs/blob/master/images/demo.gif?raw=true" width="600px" />
+</p>
+
 # How
 
 Install [golang](https://golang.org/dl/), setup a [gopath](https://github.com/golang/go/wiki/SettingGOPATH), and `go get github.com/maxchehab/redditfs; go install github.com/maxchehab/redditfs`
@@ -74,11 +78,14 @@ node_modules/
 This will ignore everything inside of a `dist`, `node_modules`, and `.vscode` directory.
 
 <<<<<<< HEAD
+
 ## PS
 
 I have only tested this on Debian Linux, therefore I can only confirm it works on my machine. For all y'all fancy programmers who can afford Macbook Pro's....
 
-<div style="text-align:center"><img src ="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" /></div>
+<p align="center">
+  <img src="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" width="450px" />
+</p>
 
 ## License
 
@@ -87,8 +94,3 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE.md](LICENS
 ## Contact
 
 Feel free to reachout to me at [twitter](https://twitter.com/maxchehab) or leave report an [issue](https://github.com/maxchehab/redditfs/issues) if there are any problems.
-=======
-
-
-Leave 
->>>>>>> 17585eefc09341a5927a541ec6663de952082f1d
