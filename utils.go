@@ -34,7 +34,6 @@ func GetAllFilesInDirectory(path string) (paths []string, err error) {
 	gitIgnoreExists := FileExists(path + "/.redditfsignore")
 	if gitIgnoreExists {
 		ignoreMatcher, err = gitignore.NewGitIgnore(path + "/.redditfsignore")
-		fmt.Println(gitIgnoreExists)
 		if err != nil {
 			return paths, err
 		}
