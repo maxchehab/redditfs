@@ -72,3 +72,17 @@ node_modules/
 ```
 
 This will ignore everything inside of a `dist`, `node_modules`, and `.vscode` directory.
+
+## PS
+
+I have only tested this on Debian Linux, therefore I can only confirm it works on my machine. For all y'all fancy programmers who can afford Macbook Pro's....
+
+<div style="text-align:center"><img src ="https://media.giphy.com/media/3ohA2ZD9EkeK2AyfdK/giphy.gif" /></div>
+
+## License
+
+This project is licensed under the GPL-3.0 License - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Contact
+
+Feel free to reachout to me at [twitter](https://twitter.com/maxchehab) or leave report an [issue](https://github.com/maxchehab/redditfs/issues) if there are any problems.
